@@ -22,6 +22,37 @@ TK2_Main_Node::TK2_Main_Node() : Node("tk2_main_node"){
 //  Lidar Callback, gets called when lidar_sub_ gets a new message (~10 times a second)
 //  !!Put your main steering and navigation logic here!!
 void TK2_Main_Node::lidar_callback(sensor_msgs::msg::LaserScan::SharedPtr msg){
+
+    //further away faster throttle 
+    float d =msg->ranges[0];
+    msg->ranges[359]
+    float speed = 0;
+    if (d > 0) {
+       speed = d*15;
+
+    }
+    if (speed > 40){
+
+      speed = 40;
+    }
+
+    kartcmd.throttle = speed; 
+    this.drive_pub_->publish(kartcmd);
+    
+
+    //turning logic 
+    
+
+
+  }
+
+
+    
+    
+
+     
+
+
   /*  This function passes the most recent LiDAR message as the 'msg' variable.
       You can access data from msg by using the arrow notation, as in 'msg-><data field>'
       For the most part, you will be grabbing the ranges data from the LiDAR (see: lidarOverview.md in the docs)
@@ -38,7 +69,7 @@ void TK2_Main_Node::lidar_callback(sensor_msgs::msg::LaserScan::SharedPtr msg){
 
   //Publishes the kartcmd message to the "/kart_cmd" topic
   this->drive_pub_->publish(kartcmd);
-}
+
 
 void TK2_Main_Node::kart_callback(tk2_msgs::msg::Kartdata::SharedPtr msg){
   xvel = msg->velocity.x;
@@ -55,3 +86,4 @@ int main(int argc, char * argv[])
   rclcpp::shutdown();
   return 0;
 }
+ 
