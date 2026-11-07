@@ -24,21 +24,54 @@ TK2_Main_Node::TK2_Main_Node() : Node("tk2_main_node"){
 void TK2_Main_Node::lidar_callback(sensor_msgs::msg::LaserScan::SharedPtr msg){
 
     //further away faster throttle 
-    float d =msg->ranges[0];
+    float maxmeter = 12;
+    float minmeter = 0;
+    float range =msg->ranges[0];
+    float closest = 100;
     msg->ranges[359]
-    float speed = 0;
-    if (d > 0) {
-       speed = d*15;
+  
+    for (int i = 345; i < 360; i++) { 
+        float range = msg->ranges[i];
+        if (range > 0 && range < 12 && range < closest){
 
-    }
-    if (speed > 40){
+          closest = range;
+        }  
 
-      speed = 40;
-    }
+        }
+        for (int i = 0; i <= 15; i++) {
+          float range = msg->ranges[i];
+        if (range > 0 && range < 12 && distance < closest){
 
+          closest = range;
+       }  
+
+     }
+
+    float speed = closest*15;
+    if (speed > 40) speed = 40;
     kartcmd.throttle = speed; 
-    this.drive_pub_->publish(kartcmd);
+    this.drive_pub->publish(kartcmd);
+     
+
+    //turning notes for later 
+    // from 30 to 90 for right and 270 to 330 for left 
+      rightsum = 0;
+      int rightn = 0;
+      for (int i = 30; i <90;i++){
+
+        float range = msg->ranges[i]
+        if( range > minmeter && range < maxmeter && range <){
+          right_sum += distance;
+          right_n++;
+        }
+       }
+       
+
+     
+
     
+       
+
 
     //turning logic 
     
